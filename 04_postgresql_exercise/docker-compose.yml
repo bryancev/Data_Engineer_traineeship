@@ -1,0 +1,55 @@
+services:
+  postgres:
+    build:
+      context: ./postgres
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: example_db
+      POSTGRES_INITDB_ARGS: --encoding=UTF-8
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    command: >
+      postgres -c shared_preload_libraries=pg_cron
+               -c cron.database_name=example_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d example_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse_db
+    restart: always
+    ports:
+      - "18123:8123"
+      - "9000:9000"
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    environment:
+      CLICKHOUSE_USER: user
+      CLICKHOUSE_PASSWORD: strongpassword
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+
+  mongo:
+    image: mongo:6
+    container_name: mongo_db
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  pgdata:
+  clickhouse_data:
+  mongodb_data:
