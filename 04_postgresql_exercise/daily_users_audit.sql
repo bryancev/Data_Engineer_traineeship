@@ -92,7 +92,7 @@ SET role = 'support'
 WHERE name = 'Ivan Ivanov';
 
 UPDATE users
-SET name = 'Anna Smirnova
+SET name = 'Anna Smirnova'
 WHERE name = 'Anna Petrova';
 
 
