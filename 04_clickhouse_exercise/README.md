@@ -19,7 +19,6 @@
   - `sumState()` — сумма баллов,
   - `countState()` — количество событий.
 - Включает `cohort_date` для расчёта ретеншна.
-- Хранит `user_ids_state` через `groupUniqArrayState()` для ретеншн-анализа.
 
 ### ✅ 3. Materialized View `user_events_mv`
 - Автоматически агрегирует данные при вставке в `user_events`.
