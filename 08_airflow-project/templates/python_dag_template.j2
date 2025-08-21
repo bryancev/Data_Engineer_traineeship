@@ -1,0 +1,24 @@
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from datetime import datetime
+import sys
+import os
+
+sys.path.append("{{ script_path.rsplit('/', 1)[0] }}")
+
+from {{ module_name }} import {% for function in functions %}{{ function }}{% if not loop.last %}, {% endif %}{% endfor %}
+
+with DAG(
+    dag_id="{{ dag_id }}",
+    start_date=datetime({{ start_date }}),
+    schedule_interval="{{ schedule }}",
+    catchup=False,
+    tags=["python", "auto-generated"]
+) as dag:
+
+    {% for function in functions %}
+    {{ function }}_task = PythonOperator(
+        task_id="{{ function }}",
+        python_callable={{ function }}
+    )
+    {% endfor %}

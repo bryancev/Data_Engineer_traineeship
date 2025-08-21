@@ -1,0 +1,42 @@
+from airflow import DAG
+from airflow.providers.postgres.operators.postgres import PostgresOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.operators.python import PythonOperator
+from datetime import datetime
+import csv
+
+def load_csv():
+    """Загружает данные из CSV в таблицу"""
+    hook = PostgresHook(postgres_conn_id="{{ conn_id }}")
+    conn = hook.get_conn()
+    cur = conn.cursor()
+    
+    with open("{{ csv_path }}", "r", encoding='utf-8') as f:
+        reader = csv.reader(f)
+        next(reader)  # Пропускаем заголовок
+        
+        for row in reader:
+            # Преобразуем пустые строки в None
+            processed_row = [None if cell == '' else cell for cell in row]
+            cur.execute(
+                "INSERT INTO {{ table_name }} VALUES (%s, %s, %s, %s)",
+                processed_row
+            )
+    conn.commit()
+    print(f"Data loaded successfully into {{ table_name }}")
+
+with DAG(
+    dag_id="{{ dag_id }}",
+    start_date=datetime({{ start_date }}),
+    schedule_interval="{{ schedule }}",
+    catchup=False,
+    tags=["csv", "auto-generated"]
+) as dag:
+
+    
+    load_data = PythonOperator(
+        task_id="load_data",
+        python_callable=load_csv
+    )
+    
+    load_data

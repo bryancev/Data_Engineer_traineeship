@@ -1,0 +1,25 @@
+from airflow import DAG
+from airflow.providers.postgres.operators.postgres import PostgresOperator
+from datetime import datetime
+
+with DAG(
+    dag_id="{{ dag_id }}",
+    start_date=datetime({{ start_date }}),
+    schedule_interval="{{ schedule }}",
+    catchup=False,
+    tags=["sql", "auto-generated"]
+) as dag:
+
+    {% for i, command in enumerate(commands) %}
+    task_{{ i }} = PostgresOperator(
+        task_id="task_{{ i }}",
+        postgres_conn_id="{{ conn_id }}",
+        sql="""
+{{ command }};
+"""
+    )
+    {% endfor %}
+    
+    {% for i in range(commands|length - 1) %}
+    task_{{ i }} >> task_{{ i+1 }}
+    {% endfor %}

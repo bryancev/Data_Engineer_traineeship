@@ -1,0 +1,12 @@
+{
+  "columns": {
+    "id": "INTEGER PRIMARY KEY",
+    "name": "TEXT NOT NULL",
+    "price": "DECIMAL(10,2)",
+    "category": "TEXT"
+  },
+  "indexes": [
+    "CREATE INDEX IF NOT EXISTS idx_products_category ON products(category)",
+    "CREATE INDEX IF NOT EXISTS idx_products_price ON products(price)"
+  ]
+}
