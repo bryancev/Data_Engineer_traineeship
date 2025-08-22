@@ -6,10 +6,10 @@ import os
 
 sys.path.append("/opt/airflow/scripts/python")
 
-from products_analysis import generate_products_report
+from products_load_data import load_products_from_csv
 
 with DAG(
-    dag_id="py_products_analysis",
+    dag_id="py_products_load_data",
     start_date=datetime(2025, 8, 22),
     schedule_interval="@daily",
     catchup=False,
@@ -17,8 +17,8 @@ with DAG(
 ) as dag:
 
     
-    generate_products_report_task = PythonOperator(
-        task_id="generate_products_report",
-        python_callable=generate_products_report
+    load_products_from_csv_task = PythonOperator(
+        task_id="load_products_from_csv",
+        python_callable=load_products_from_csv
     )
     

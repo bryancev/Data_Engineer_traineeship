@@ -1,6 +1,6 @@
--- schedule: @weekly
+-- schedule: @once
 CREATE TABLE IF NOT EXISTS products (
-    id INTEGER,
+    id INTEGER PRIMARY KEY,
     name TEXT NOT NULL,
     price DECIMAL(10,2),
     category TEXT
@@ -14,3 +14,4 @@ CREATE TABLE IF NOT EXISTS products_transformed (
     price_category TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+

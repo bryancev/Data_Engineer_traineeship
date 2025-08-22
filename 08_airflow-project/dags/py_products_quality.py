@@ -10,7 +10,7 @@ from products_quality import monitor_data_quality
 
 with DAG(
     dag_id="py_products_quality",
-    start_date=datetime(2025, 8, 21),
+    start_date=datetime(2025, 8, 22),
     schedule_interval="@daily",
     catchup=False,
     tags=["python", "auto-generated"]

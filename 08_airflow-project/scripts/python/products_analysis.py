@@ -60,5 +60,5 @@ def generate_products_report():
     with open(report_path, "w", encoding="utf-8") as f:
         f.write(report)
     
-    print(f"Products report saved to: {report_path}")
+    print(f"Отчет по продуктам сохранен в: {report_path}")
     print(report)

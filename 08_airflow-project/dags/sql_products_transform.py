@@ -4,7 +4,7 @@ from datetime import datetime
 
 with DAG(
     dag_id="sql_products_transform",
-    start_date=datetime(2025, 8, 21),
+    start_date=datetime(2025, 8, 22),
     schedule_interval="@daily",
     catchup=False,
     tags=["sql", "auto-generated"]
@@ -15,6 +15,7 @@ with DAG(
         task_id="task_0",
         postgres_conn_id="postgres_default",
         sql="""
+-- Обновляем пустые категории
 UPDATE products 
 SET category = 'Unknown' 
 WHERE category IS NULL OR category = '';
@@ -25,8 +26,9 @@ WHERE category IS NULL OR category = '';
         task_id="task_1",
         postgres_conn_id="postgres_default",
         sql="""
-INSERT INTO products_transformed (id, name, price, category, price_category, created_at)
-SELECT DISTINCT ON (id)
+-- Преобразуем данные и загружаем в целевую таблицу
+INSERT INTO products_transformed (id, name, price, category, price_category)
+SELECT 
     id,
     name,
     price,
@@ -35,15 +37,13 @@ SELECT DISTINCT ON (id)
         WHEN price < 1000 THEN 'Budget'
         WHEN price BETWEEN 1000 AND 5000 THEN 'Medium'
         ELSE 'Premium'
-    END,
-    CURRENT_TIMESTAMP
+    END
 FROM products
 ON CONFLICT (id) DO UPDATE SET
     name = EXCLUDED.name,
     price = EXCLUDED.price,
     category = EXCLUDED.category,
-    price_category = EXCLUDED.price_category,
-    created_at = CURRENT_TIMESTAMP;
+    price_category = EXCLUDED.price_category;
 """
     )
     
