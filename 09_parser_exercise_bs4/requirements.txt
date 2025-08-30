@@ -1,0 +1,6 @@
+requests
+beautifulsoup4
+fake-useragent
+pyspark
+psycopg2-binary
+pandas
