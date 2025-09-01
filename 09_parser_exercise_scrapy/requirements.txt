@@ -1,0 +1,8 @@
+scrapy==2.11.0
+sqlalchemy==1.4.54
+psycopg2-binary==2.9.9
+selenium==4.23.1
+fake-useragent==1.5.1
+python-dotenv==1.0.1
+pandas==2.2.2
+pyspark==3.5.1
