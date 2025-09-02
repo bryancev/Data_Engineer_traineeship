@@ -44,33 +44,14 @@ POSTGRES_PASSWORD=your_password
 POSTGRES_DB=your_database
 POSTGRES_HOST=your_host
 POSTGRES_PORT=your_port
-```
 
----
-
-### Очищенная таблица (`zolotoy_clean_products`)
-```sql
-CREATE TABLE public.zolotoy_clean_products (
-    sku INTEGER UNIQUE PRIMARY KEY,
-    category TEXT NOT NULL,
-    subcategory TEXT,
-    name TEXT NOT NULL,
-    price INT,
-    old_price INT,
-    discount INT,
-    rating INT NOT NULL,
-    reviews INT NOT NULL,
-    product_url TEXT NOT NULL,
-    parsed_date DATE,
-    inserted_date TIMESTAMP
-);
 ```
 
 ---
 
 ## 🚀 Использование
 
-### 1. Создание таблица `zolotoy_raw_products` в Postgres для хранения "сырых" данных
+### 1. Создание таблицы `zolotoy_raw_products` в Postgres для хранения "сырых" данных
 ```sql
 CREATE TABLE public.zolotoy_raw_products (
     sku TEXT,
